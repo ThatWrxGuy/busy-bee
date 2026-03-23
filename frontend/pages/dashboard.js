@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
+import Link from 'next/link'
 
 export default function Dashboard() {
   const { user, signOut } = useAuth()
@@ -23,18 +24,18 @@ export default function Dashboard() {
   }
 
   const domains = [
-    { name: 'Health', icon: '❤️', color: '#ff6b6b' },
-    { name: 'Career', icon: '💼', color: '#4ecdc4' },
-    { name: 'Finance', icon: '💰', color: '#ffd93d' },
-    { name: 'Goals', icon: '🎯', color: '#6c5ce7' },
-    { name: 'Habits', icon: '✅', color: '#00b894' },
-    { name: 'Mindset', icon: '🧠', color: '#a29bfe' },
-    { name: 'Relationships', icon: '❤️‍🔥', color: '#fd79a8' },
-    { name: 'Education', icon: '📚', color: '#00cec9' },
-    { name: 'Spirituality', icon: '🕊️', color: '#74b9ff' },
-    { name: 'Family', icon: '👨‍👩‍👧', color: '#fab1a0' },
-    { name: 'Recreation', icon: '🎮', color: '#e17055' },
-    { name: 'Travel', icon: '✈️', color: '#0984e3' },
+    { name: 'Health', icon: '❤️', color: '#ff6b6b', route: '/health', description: 'Workouts, sleep, nutrition' },
+    { name: 'Career', icon: '💼', color: '#4ecdc4', route: '/career', description: 'Jobs, interviews, goals' },
+    { name: 'Finance', icon: '💰', color: '#ffd93d', route: '/finance', description: 'Income, expenses, investments' },
+    { name: 'Goals', icon: '🎯', color: '#6c5ce7', route: '/goals', description: 'Track your objectives' },
+    { name: 'Habits', icon: '✅', color: '#00b894', route: '/habits', description: 'Daily routines' },
+    { name: 'Mindset', icon: '🧠', color: '#a29bfe', route: '/mindset', description: 'Mental wellness' },
+    { name: 'Relationships', icon: '❤️‍🔥', color: '#fd79a8', route: '/relationships', description: 'Connections' },
+    { name: 'Education', icon: '📚', color: '#00cec9', route: '/education', description: 'Learning progress' },
+    { name: 'Spirituality', icon: '🕊️', color: '#74b9ff', route: '/spirituality', description: 'Inner peace' },
+    { name: 'Family', icon: '👨‍👩‍👧', color: '#fab1a0', route: '/family', description: 'Family time' },
+    { name: 'Recreation', icon: '🎮', color: '#e17055', route: '/recreation', description: 'Fun & hobbies' },
+    { name: 'Travel', icon: '✈️', color: '#0984e3', route: '/travel', description: 'Adventures' },
   ]
 
   if (loading) return <div style={styles.loading}>Loading...</div>
@@ -57,11 +58,14 @@ export default function Dashboard() {
 
         <div style={styles.grid}>
           {domains.map(domain => (
-            <div key={domain.name} style={{...styles.card, borderLeftColor: domain.color}}>
+            <Link href={domain.route} key={domain.name} style={{...styles.cardLink, borderLeftColor: domain.color}}>
               <span style={styles.icon}>{domain.icon}</span>
-              <span style={styles.domainName}>{domain.name}</span>
+              <div style={styles.cardContent}>
+                <span style={styles.domainName}>{domain.name}</span>
+                <span style={styles.domainDesc}>{domain.description}</span>
+              </div>
               <span style={styles.arrow}>→</span>
-            </div>
+            </Link>
           ))}
         </div>
       </main>
@@ -102,10 +106,10 @@ const styles = {
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-    gap: '20px'
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gap: '16px'
   },
-  card: {
+  cardLink: {
     display: 'flex',
     alignItems: 'center',
     gap: '16px',
@@ -115,7 +119,19 @@ const styles = {
     borderLeft: '4px solid',
     boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
     cursor: 'pointer',
-    transition: 'transform 0.2s, box-shadow 0.2s'
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    textDecoration: 'none',
+    color: 'inherit'
+  },
+  cardContent: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px'
+  },
+  domainDesc: {
+    fontSize: '13px',
+    color: '#888'
   },
   icon: {
     fontSize: '28px'
