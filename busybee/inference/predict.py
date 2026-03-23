@@ -8,7 +8,12 @@ from busybee.inference.loader import load_model
 
 
 def predict(request: PredictionRequest, artifact_root_dir: str = "artifacts") -> PredictionResponse:
-    model, contract = load_model(request.model_name, artifact_root_dir=artifact_root_dir)
+    """Predict using model artifact with optional run_id for explicit identity."""
+    model, contract = load_model(
+        request.model_name, 
+        artifact_root_dir=artifact_root_dir,
+        run_id=request.run_id,  # Thread run_id through per doctrine
+    )
     matrix = np.asarray(request.records, dtype=float)
 
     if matrix.ndim != 2:

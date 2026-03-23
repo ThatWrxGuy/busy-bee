@@ -68,8 +68,10 @@ class TrainResult(BaseModel):
 
 
 class PredictionRequest(BaseModel):
+    """Contract for prediction - includes optional run_id for explicit artifact identity."""
     records: list[list[float]] = Field(default_factory=list)
     model_name: str = "baseline_logistic"
+    run_id: str | None = None  # Optional: load specific run version per doctrine
 
     @field_validator("records")
     @classmethod

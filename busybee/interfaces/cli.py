@@ -49,15 +49,8 @@ def main() -> None:
         if not args.input_json:
             raise SystemExit("--input-json is required for predict")
         records = json.loads(Path(args.input_json).read_text())
-        # Load with run-scoped artifact path if run_id provided
-        from busybee.inference.loader import load_model
-        model, contract = load_model(
-            model_name=model_name,
-            artifact_root_dir=artifact_root_dir,
-            run_id=args.run_id,
-        )
-        from busybee.inference.predict import predict
-        response = predict(PredictionRequest(records=records, model_name=model_name), artifact_root_dir=artifact_root_dir)
+        # Thread run_id through PredictionRequest for explicit artifact identity
+        response = predict(PredictionRequest(records=records, model_name=model_name, run_id=args.run_id), artifact_root_dir=artifact_root_dir)
         print(response.model_dump_json(indent=2))
 
 
