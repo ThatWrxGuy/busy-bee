@@ -18,8 +18,17 @@ BusyBee is a doctrine-driven machine learning starter system. It translates the 
 python -m venv .venv
 source .venv/bin/activate
 pip install -e .
-busybee train
-busybee evaluate
+
+# Train a model - produces run-scoped artifacts
+busybee train --config config/base.yaml
+
+# Evaluate an existing artifact (requires --run-id from train output)
+busybee evaluate --config config/base.yaml --run-id <run_id_from_train>
+
+# Predict using specific artifact version
+busybee predict --config config/base.yaml --input-json data.json --run-id <run_id>
+
+# Run tests
 pytest
 ```
 

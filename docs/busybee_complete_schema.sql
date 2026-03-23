@@ -346,12 +346,13 @@ CREATE TABLE IF NOT EXISTS user_rewards (
 -- PART 2: STORAGE BUCKETS
 -- =====================================================
 
-INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_extensions)
-VALUES ('avatars', 'avatars', true, 5242880, ARRAY['jpg', 'jpeg', 'png', 'gif', 'webp'])
+-- Note: Supabase storage schema may vary by version. Using core columns.
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('avatars', 'avatars', true)
 ON CONFLICT (id) DO NOTHING;
 
-INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_extensions)
-VALUES ('uploads', 'uploads', true, 10485760, ARRAY['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx'])
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('uploads', 'uploads', true)
 ON CONFLICT (id) DO NOTHING;
 
 -- =====================================================

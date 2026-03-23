@@ -39,10 +39,14 @@ def train_model(
     )
     pipeline.fit(X_train, y_train)
 
-    model_filename = f"{request.config.model_name}.joblib"
-    manifest_filename = f"{request.config.model_name}.manifest.json"
-    model_path = dirs["models"] / model_filename
-    manifest_path = dirs["models"] / manifest_filename
+    # Use run-scoped filenames for artifact identity per doctrine
+    run_version = f"{context.run_id}-{request.config.model_version}"
+    model_filename = f"{run_version}.joblib"
+    manifest_filename = f"{run_version}.manifest.json"
+    model_subdir = dirs["models"] / request.config.model_name
+    model_subdir.mkdir(exist_ok=True)
+    model_path = model_subdir / model_filename
+    manifest_path = model_subdir / manifest_filename
 
     try:
         joblib.dump(pipeline, model_path)
