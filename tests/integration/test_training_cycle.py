@@ -28,8 +28,9 @@ artifacts:
 '''.format(artifact_dir=(tmp_path / "artifacts").as_posix())
     )
     result = run_training_cycle(str(config_path))
-    assert Path(result["model_path"]).exists()
-    assert Path(result["manifest_path"]).exists()
-    assert Path(result["report_path"]).exists()
-    assert Path(result["feedback_path"]).exists()
-    assert "accuracy" in result["metrics"]
+    # Use typed contract attribute access per doctrine
+    assert Path(result.model_path).exists()
+    assert Path(result.manifest_path).exists()
+    assert Path(result.report_path).exists()
+    assert Path(result.feedback_path).exists()
+    assert "accuracy" in result.metrics

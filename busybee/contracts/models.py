@@ -100,3 +100,13 @@ class OutcomeRecord(BaseModel):
     run_id: str
     outcome_type: str
     payload: dict[str, Any]
+
+
+class TrainingCycleResult(BaseModel):
+    """Contract for orchestration boundary - all interaction is contract-based."""
+    run_id: str
+    model_path: str
+    manifest_path: str
+    report_path: str
+    feedback_path: str
+    metrics: dict[str, float]

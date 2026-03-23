@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from busybee.contracts.models import EvaluationReport, OutcomeRecord, TrainingConfig, TrainingRequest
+from busybee.contracts.models import EvaluationReport, OutcomeRecord, TrainingConfig, TrainingRequest, TrainingCycleResult
 from busybee.evaluation.metrics import compute_classification_metrics
 from busybee.evaluation.report import write_report
 from busybee.feedback.store import record_outcome
@@ -19,7 +19,8 @@ def _system_identity_from_config(config: dict) -> SystemIdentity:
     )
 
 
-def run_training_cycle(config_path: str = "config/base.yaml") -> dict:
+def run_training_cycle(config_path: str = "config/base.yaml") -> TrainingCycleResult:
+    """Run the full training cycle and return typed contract per doctrine."""
     configure_logging()
     raw = load_config(config_path)
     identity = _system_identity_from_config(raw)
@@ -51,11 +52,11 @@ def run_training_cycle(config_path: str = "config/base.yaml") -> dict:
     )
     train_result.metrics = metrics
     train_result.report_path = report_path
-    return {
-        "run_id": train_result.run_id,
-        "model_path": train_result.model_path,
-        "manifest_path": train_result.manifest_path,
-        "report_path": report_path,
-        "feedback_path": feedback_path,
-        "metrics": metrics,
-    }
+    return TrainingCycleResult(
+        run_id=train_result.run_id,
+        model_path=train_result.model_path,
+        manifest_path=train_result.manifest_path,
+        report_path=report_path,
+        feedback_path=feedback_path,
+        metrics=metrics,
+    )
